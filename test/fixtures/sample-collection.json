@@ -1,0 +1,94 @@
+{
+    "info": {
+        "name": "Sample API Tests",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Get User",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status code is 200', function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});",
+                            "",
+                            "pm.test('Response has user data', function () {",
+                            "    const responseJson = pm.response.json();",
+                            "    pm.expect(responseJson).to.have.property('id');",
+                            "    pm.expect(responseJson).to.have.property('name');",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "https://jsonplaceholder.typicode.com/users/1",
+                    "protocol": "https",
+                    "host": [
+                        "jsonplaceholder",
+                        "typicode",
+                        "com"
+                    ],
+                    "path": [
+                        "users",
+                        "1"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Create User",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status code is 201', function () {",
+                            "    pm.response.to.have.status(201);",
+                            "});",
+                            "",
+                            "pm.test('Response has created user data', function () {",
+                            "    const responseJson = pm.response.json();",
+                            "    pm.expect(responseJson).to.have.property('id');",
+                            "    pm.expect(responseJson.name).to.eql('John Doe');",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\"\n}"
+                },
+                "url": {
+                    "raw": "https://jsonplaceholder.typicode.com/users",
+                    "protocol": "https",
+                    "host": [
+                        "jsonplaceholder",
+                        "typicode",
+                        "com"
+                    ],
+                    "path": [
+                        "users"
+                    ]
+                }
+            }
+        }
+    ]
+}
