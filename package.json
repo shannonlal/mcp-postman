@@ -1,6 +1,6 @@
 {
   "name": "mcp-postman",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP Server for running Postman collections using Newman",
   "main": "build/index.js",
   "type": "module",

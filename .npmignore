@@ -1,0 +1,34 @@
+# Source files
+src/
+example/
+test/
+
+# Configuration files
+.eslintrc.json
+tsconfig.json
+tsconfig.test.json
+vitest.config.ts
+
+# Development files
+.husky/
+.github/
+prompts/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Git files
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+
+# Test coverage
+coverage/
+
+# Lock files
+pnpm-lock.yaml
