@@ -1,0 +1,11 @@
+{
+  "name": "Example API Environment",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "default",
+      "enabled": true
+    }
+  ]
+}
