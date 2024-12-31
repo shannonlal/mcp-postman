@@ -10,12 +10,26 @@
   "scripts": {
     "build": "tsc && chmod +x build/index.js",
     "test": "vitest",
+    "test:ci": "vitest run",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
-    "clean": "rm -rf build"
+    "clean": "rm -rf build",
+    "prepare": "husky"
   },
-  "keywords": ["mcp", "postman", "newman", "api-testing"],
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "eslint --fix",
+      "vitest related --run"
+    ]
+  },
+  "keywords": [
+    "mcp",
+    "postman",
+    "newman",
+    "api-testing"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -24,13 +38,15 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
     "@types/newman": "^5.3.0",
+    "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitest/coverage-v8": "^1.0.0",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^9.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.3.0",
     "prettier": "^3.0.0",
     "ts-node": "^10.9.0",
     "typescript": "^5.0.0",
