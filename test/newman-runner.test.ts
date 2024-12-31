@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { NewmanRunner } from '../src/newman/runner.js';
-import newman from 'newman';
+import newman, { NewmanRunSummary } from 'newman';
+import { EventEmitter } from 'events';
 
 // Mock newman module
 vi.mock('newman', () => ({
@@ -12,7 +13,7 @@ vi.mock('newman', () => ({
 describe('NewmanRunner', () => {
     const runner = new NewmanRunner();
 
-    it('should successfully run a collection', async () => {
+    it('should successfully run a collection', async (): Promise<void> => {
         // Mock successful newman run
         const mockSummary = {
             run: {
@@ -39,8 +40,9 @@ describe('NewmanRunner', () => {
             }
         };
 
-        (newman.run as any).mockImplementation((options: any, callback: any) => {
-            callback(null, mockSummary);
+        vi.mocked(newman.run).mockImplementation(function(callback: (err: Error | null, summary: NewmanRunSummary) => void) {
+            callback(null, mockSummary as unknown as NewmanRunSummary);
+            return new EventEmitter();
         });
 
         const result = await runner.runCollection({
@@ -62,10 +64,11 @@ describe('NewmanRunner', () => {
         });
     });
 
-    it('should handle newman run errors', async () => {
+    it('should handle newman run errors', async (): Promise<void> => {
         // Mock newman error
-        (newman.run as any).mockImplementation((options: any, callback: any) => {
-            callback(new Error('Failed to load collection'));
+        vi.mocked(newman.run).mockImplementation(function(callback: (err: Error | null, summary: NewmanRunSummary) => void) {
+            callback(new Error('Failed to load collection'), {} as NewmanRunSummary);
+            return new EventEmitter();
         });
 
         await expect(runner.runCollection({
@@ -73,7 +76,7 @@ describe('NewmanRunner', () => {
         })).rejects.toThrow('Failed to load collection');
     });
 
-    it('should handle invalid failure objects', async () => {
+    it('should handle invalid failure objects', async (): Promise<void> => {
         // Mock newman run with invalid failure object
         const mockSummary = {
             run: {
@@ -91,8 +94,9 @@ describe('NewmanRunner', () => {
             }
         };
 
-        (newman.run as any).mockImplementation((options: any, callback: any) => {
-            callback(null, mockSummary);
+        vi.mocked(newman.run).mockImplementation(function(callback: (err: Error | null, summary: NewmanRunSummary) => void) {
+            callback(null, mockSummary as unknown as NewmanRunSummary);
+            return new EventEmitter();
         });
 
         const result = await runner.runCollection({
