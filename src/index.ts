@@ -2,7 +2,7 @@
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { PostmanServer } from "./server/server.js";
 
-async function main() {
+async function main(): Promise<void> {
     try {
         const postmanServer = new PostmanServer();
         const server = await postmanServer.start();
@@ -28,4 +28,4 @@ async function main() {
     }
 }
 
-main();
+void main();

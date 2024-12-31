@@ -1,0 +1,42 @@
+name: CI
+run-name: ${{ github.actor }} triggered CI workflow
+on:
+  pull_request:
+
+jobs:
+  main:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.19.0"
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
+
+      - name: Verify lockfile
+        run: |
+          if [ ! -f "pnpm-lock.yaml" ]; then
+            echo "pnpm-lock.yaml not found!"
+            exit 1
+          fi
+          echo "pnpm-lock.yaml found"
+          cat pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run ESLint
+        run: pnpm lint
+
+      - name: Run Tests
+        run: pnpm test:ci

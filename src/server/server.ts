@@ -32,7 +32,7 @@ export class PostmanServer {
         this.setupTools();
     }
 
-    private setupTools() {
+    private setupTools(): void {
         // Register available tools
         this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
             tools: [
@@ -101,8 +101,8 @@ export class PostmanServer {
         });
     }
 
-    async start() {
+    async start(): Promise<Server> {
         // This will be connected in index.ts
-        return this.server;
+        return Promise.resolve(this.server);
     }
 }

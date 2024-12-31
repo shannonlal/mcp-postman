@@ -1,11 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { PostmanServer } from '../src/server/server.js';
-import { NewmanRunner } from '../src/newman/runner.js';
-import { 
-    CallToolRequestSchema, 
-    ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
-//import { MockTransport } from '@modelcontextprotocol/sdk/testing.js';
 
 // Mock NewmanRunner
 vi.mock('../src/newman/runner.js', () => ({
@@ -23,7 +17,7 @@ describe('PostmanServer', () => {
         //transport = new MockTransport();
     });
 
-    it('should list available tools', async () => {
+    it('should list available tools', async (): Promise<void> => {
         expect(server).toBeDefined();
         // const mcpServer = await server.start();
         // await mcpServer.connect(transport);

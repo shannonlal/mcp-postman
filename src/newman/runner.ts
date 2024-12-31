@@ -1,4 +1,4 @@
-import newman, { NewmanRunSummary, NewmanRunFailure } from 'newman';
+import newman, { NewmanRunFailure } from 'newman';
 import { CollectionRunOptions, TestResult, TestFailure } from '../server/types.js';
 
 /**
