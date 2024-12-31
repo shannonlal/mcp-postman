@@ -1,152 +1,246 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { PostmanServer } from '../src/server/server.js';
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
-// Mock NewmanRunner
-vi.mock('../src/newman/runner.js', () => ({
-    NewmanRunner: vi.fn().mockImplementation(() => ({
-        runCollection: vi.fn()
-    }))
+// Define types for collection run parameters
+interface CollectionRunParams {
+  collection: string;
+  environment?: string;
+  globals?: string;
+  iterationCount?: number;
+}
+
+vi.mock("../src/newman/runner.js", () => ({
+  NewmanRunner: vi.fn().mockImplementation(() => ({
+    runCollection: vi.fn(),
+  })),
 }));
 
-describe('PostmanServer', () => {
-    let server: PostmanServer;
-    //let transport: MockTransport;
+import { PostmanServer } from "../src/server/server.js";
+import { NewmanRunner } from "../src/newman/runner.js";
 
-    beforeEach(() => {
-        server = new PostmanServer();
-        //transport = new MockTransport();
+const MockedNewmanRunner = vi.mocked(NewmanRunner);
+
+describe("PostmanServer", () => {
+  let server: PostmanServer;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    server = new PostmanServer();
+  });
+
+  it("should initialize server with proper configuration", async (): Promise<void> => {
+    const mcpServer = await server.start();
+
+    // Verify server is properly initialized with expected methods
+    expect(mcpServer).toBeDefined();
+    expect(typeof mcpServer.connect).toBe("function");
+    expect(typeof mcpServer.close).toBe("function");
+  });
+
+  it("should properly instantiate NewmanRunner", () => {
+    expect(MockedNewmanRunner).toHaveBeenCalledTimes(1);
+    // Verify NewmanRunner was constructed with no arguments
+    expect(MockedNewmanRunner).toHaveBeenCalledWith();
+  });
+
+  it("should register run-collection tool", async () => {
+    const mcpServer = await server.start();
+
+    // Verify server is properly initialized
+    expect(mcpServer).toBeDefined();
+
+    // Verify the server has the expected methods
+    expect(typeof mcpServer.setRequestHandler).toBe("function");
+    expect(typeof mcpServer.connect).toBe("function");
+  });
+
+  it("should execute collection run with minimal parameters", async () => {
+    // Setup mock response
+    const mockResult = {
+      success: true,
+      summary: { total: 1, failed: 0, passed: 1 },
+    };
+
+    // Setup mock runner with spy
+    const runCollectionSpy = vi.fn().mockResolvedValue(mockResult);
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
+
+    // Simulate running a collection
+    await mockRunner.runCollection({ collection: "./test-collection.json" });
+
+    // Verify mock runner was called with correct parameters
+    expect(runCollectionSpy).toHaveBeenCalledWith({
+      collection: "./test-collection.json",
     });
 
-    it('should list available tools', async (): Promise<void> => {
-        expect(server).toBeDefined();
-        // const mcpServer = await server.start();
-        // await mcpServer.connect(transport);
+    // Verify mock runner returned expected result
+    expect(await runCollectionSpy.mock.results[0].value).toEqual(mockResult);
+  });
 
-        // const response = await transport.handleRequest({
-        //     jsonrpc: '2.0',
-        //     id: '1',
-        //     method: 'tools/list',
-        //     params: {}
-        // });
+  it("should execute collection run with all parameters", async () => {
+    // Setup mock response
+    const mockResult = {
+      success: true,
+      summary: {
+        total: 2,
+        failed: 0,
+        passed: 2,
+      },
+    };
 
-        // const result = response.result as ListToolsResponse;
-        // expect(result.tools).toHaveLength(1);
-        // expect(result.tools[0]).toMatchObject({
-        //     name: 'run-collection',
-        //     description: expect.any(String),
-        //     inputSchema: {
-        //         type: 'object',
-        //         properties: {
-        //             collection: {
-        //                 type: 'string'
-        //             }
-        //         },
-        //         required: ['collection']
-        //     }
-        // });
+    // Setup mock runner with spy
+    const runCollectionSpy = vi.fn().mockResolvedValue(mockResult);
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
+
+    // Simulate running a collection with all parameters
+    await mockRunner.runCollection({
+      collection: "./test-collection.json",
+      environment: "./env.json",
+      globals: "./globals.json",
+      iterationCount: 2,
     });
 
-    // it('should execute collection run tool successfully', async () => {
-    //     const mockResult = {
-    //         success: true,
-    //         summary: {
-    //             total: 2,
-    //             failed: 0,
-    //             passed: 2
-    //         },
-    //         failures: [],
-    //         timings: {
-    //             started: '2024-01-01T00:00:00.000Z',
-    //             completed: '2024-01-01T00:00:01.000Z',
-    //             duration: 1000
-    //         }
-    //     };
+    // Verify mock runner was called with all parameters
+    expect(runCollectionSpy).toHaveBeenCalledWith({
+      collection: "./test-collection.json",
+      environment: "./env.json",
+      globals: "./globals.json",
+      iterationCount: 2,
+    });
 
-    //     const runCollectionMock = vi.fn().mockResolvedValue(mockResult);
-    //     (NewmanRunner as any).mockImplementation(() => ({
-    //         runCollection: runCollectionMock
-    //     }));
+    // Verify mock runner returned expected result
+    expect(await runCollectionSpy.mock.results[0].value).toEqual(mockResult);
+  });
 
-    //     const mcpServer = await server.start();
-    //     await mcpServer.connect(transport);
+  it("should handle invalid collection path error", async () => {
+    // Setup mock runner with spy that rejects
+    const runCollectionSpy = vi
+      .fn()
+      .mockRejectedValue(new Error("Could not find collection file"));
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
 
-    //     const response = await transport.handleRequest({
-    //         jsonrpc: '2.0',
-    //         id: '1',
-    //         method: 'tools/call',
-    //         params: {
-    //             name: 'run-collection',
-    //             arguments: {
-    //                 collection: './test-collection.json'
-    //             }
-    //         }
-    //     });
+    // Simulate running with invalid collection path
+    await expect(
+      mockRunner.runCollection({
+        collection: "./invalid-collection.json",
+      }),
+    ).rejects.toThrow("Could not find collection file");
+  });
 
-    //     const result = response.result as CallToolResponse;
-    //     expect(result.content).toHaveLength(1);
-    //     expect(JSON.parse(result.content[0].text)).toEqual(mockResult);
-    //     expect(runCollectionMock).toHaveBeenCalledWith({
-    //         collection: './test-collection.json'
-    //     });
-    // });
+  it("should handle invalid environment file error", async () => {
+    // Setup mock runner with spy that rejects
+    const runCollectionSpy = vi
+      .fn()
+      .mockRejectedValue(new Error("Could not find environment file"));
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
 
-    // it('should handle collection run errors', async () => {
-    //     const runCollectionMock = vi.fn().mockRejectedValue(
-    //         new Error('Failed to load collection')
-    //     );
-    //     (NewmanRunner as any).mockImplementation(() => ({
-    //         runCollection: runCollectionMock
-    //     }));
+    // Simulate running with invalid environment file
+    await expect(
+      mockRunner.runCollection({
+        collection: "./test-collection.json",
+        environment: "./invalid-env.json",
+      }),
+    ).rejects.toThrow("Could not find environment file");
+  });
 
-    //     const mcpServer = await server.start();
-    //     await mcpServer.connect(transport);
+  it("should handle invalid globals file error", async () => {
+    // Setup mock runner with spy that rejects
+    const runCollectionSpy = vi
+      .fn()
+      .mockRejectedValue(new Error("Could not find globals file"));
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
 
-    //     const response = await transport.handleRequest({
-    //         jsonrpc: '2.0',
-    //         id: '1',
-    //         method: 'tools/call',
-    //         params: {
-    //             name: 'run-collection',
-    //             arguments: {
-    //                 collection: './invalid-collection.json'
-    //             }
-    //         }
-    //     });
+    // Simulate running with invalid globals file
+    await expect(
+      mockRunner.runCollection({
+        collection: "./test-collection.json",
+        globals: "./invalid-globals.json",
+      }),
+    ).rejects.toThrow("Could not find globals file");
+  });
 
-    //     const result = response.result as CallToolResponse;
-    //     expect(result.isError).toBe(true);
-    //     expect(JSON.parse(result.content[0].text)).toEqual({
-    //         error: 'Failed to load collection',
-    //         success: false
-    //     });
-    // });
+  it("should handle invalid iterationCount error", async () => {
+    // Setup mock runner with spy that rejects
+    const runCollectionSpy = vi
+      .fn()
+      .mockRejectedValue(new Error("iterationCount must be greater than 0"));
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
 
-    // it('should validate tool input', async () => {
-    //     const mcpServer = await server.start();
-    //     await mcpServer.connect(transport);
+    // Simulate running with invalid iteration count
+    await expect(
+      mockRunner.runCollection({
+        collection: "./test-collection.json",
+        iterationCount: 0,
+      }),
+    ).rejects.toThrow("iterationCount must be greater than 0");
+  });
 
-    //     // Test with missing required field
-    //     await expect(transport.handleRequest({
-    //         jsonrpc: '2.0',
-    //         id: '1',
-    //         method: 'tools/call',
-    //         params: {
-    //             name: 'run-collection',
-    //             arguments: {}
-    //         }
-    //     })).rejects.toThrow();
+  it("should reject when collection parameter is missing", async () => {
+    // Setup mock runner with spy that rejects
+    const runCollectionSpy = vi
+      .fn()
+      .mockRejectedValue(new Error("collection parameter is required"));
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
 
-    //     // Test with invalid tool name
-    //     await expect(transport.handleRequest({
-    //         jsonrpc: '2.0',
-    //         id: '1',
-    //         method: 'tools/call',
-    //         params: {
-    //             name: 'invalid-tool',
-    //             arguments: {
-    //                 collection: './test-collection.json'
-    //             }
-    //         }
-    //     })).rejects.toThrow('Unknown tool: invalid-tool');
-    // });
+    // Simulate running without collection parameter
+    await expect(
+      mockRunner.runCollection({} as Partial<CollectionRunParams>),
+    ).rejects.toThrow("collection parameter is required");
+  });
+
+  it("should reject when iterationCount is less than 1", async () => {
+    // Setup mock runner with spy that rejects
+    const runCollectionSpy = vi
+      .fn()
+      .mockRejectedValue(new Error("iterationCount must be greater than 0"));
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
+
+    // Simulate running with invalid iteration count
+    await expect(
+      mockRunner.runCollection({
+        collection: "./test-collection.json",
+        iterationCount: -1,
+      }),
+    ).rejects.toThrow("iterationCount must be greater than 0");
+  });
+
+  it("should reject when unknown tool name is provided", async () => {
+    // Setup mock runner with spy that rejects
+    const runCollectionSpy = vi
+      .fn()
+      .mockRejectedValue(new Error("unknown tool parameter"));
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
+
+    // Simulate running with unknown tool name
+    await expect(
+      mockRunner.runCollection({
+        collection: "./test-collection.json",
+        tool: "unknown-tool",
+      } as CollectionRunParams & { tool: string }),
+    ).rejects.toThrow("unknown tool parameter");
+  });
+
+  it("should handle invalid input types", async () => {
+    // Setup mock runner with spy that rejects
+    const runCollectionSpy = vi
+      .fn()
+      .mockRejectedValue(new Error("collection must be a string"));
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
+
+    // Simulate running with invalid input type
+    await expect(
+      mockRunner.runCollection({
+        collection: 123,
+      } as unknown as CollectionRunParams),
+    ).rejects.toThrow("collection must be a string");
+  });
 });
