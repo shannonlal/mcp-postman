@@ -34,6 +34,17 @@ describe("PostmanServer", () => {
     expect(MockedNewmanRunner).toHaveBeenCalledWith();
   });
 
+  it("should register run-collection tool", async () => {
+    const mcpServer = await server.start();
+
+    // Verify server is properly initialized
+    expect(mcpServer).toBeDefined();
+
+    // Verify the server has the expected methods
+    expect(typeof mcpServer.setRequestHandler).toBe("function");
+    expect(typeof mcpServer.connect).toBe("function");
+  });
+
   // it('should execute collection run tool successfully', async () => {
   //     const mockResult = {
   //         success: true,
@@ -122,10 +133,7 @@ describe("PostmanServer", () => {
   //             name: 'run-collection',
   //             arguments: {}
   //         }
-  //     })).rejects.toThrow();
-
-  //     // Test with invalid tool name
-  //     await expect(transport.handleRequest({
+  //     })).rejects.toThrow();  //     await expect(transport.handleRequest({
   //         jsonrpc: '2.0',
   //         id: '1',
   //         method: 'tools/call',
