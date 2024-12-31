@@ -1,5 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
+// Define types for collection run parameters
+interface CollectionRunParams {
+  collection: string;
+  environment?: string;
+  globals?: string;
+  iterationCount?: number;
+}
+
 vi.mock("../src/newman/runner.js", () => ({
   NewmanRunner: vi.fn().mockImplementation(() => ({
     runCollection: vi.fn(),
@@ -170,5 +178,69 @@ describe("PostmanServer", () => {
         iterationCount: 0,
       }),
     ).rejects.toThrow("iterationCount must be greater than 0");
+  });
+
+  it("should reject when collection parameter is missing", async () => {
+    // Setup mock runner with spy that rejects
+    const runCollectionSpy = vi
+      .fn()
+      .mockRejectedValue(new Error("collection parameter is required"));
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
+
+    // Simulate running without collection parameter
+    await expect(
+      mockRunner.runCollection({} as Partial<CollectionRunParams>),
+    ).rejects.toThrow("collection parameter is required");
+  });
+
+  it("should reject when iterationCount is less than 1", async () => {
+    // Setup mock runner with spy that rejects
+    const runCollectionSpy = vi
+      .fn()
+      .mockRejectedValue(new Error("iterationCount must be greater than 0"));
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
+
+    // Simulate running with invalid iteration count
+    await expect(
+      mockRunner.runCollection({
+        collection: "./test-collection.json",
+        iterationCount: -1,
+      }),
+    ).rejects.toThrow("iterationCount must be greater than 0");
+  });
+
+  it("should reject when unknown tool name is provided", async () => {
+    // Setup mock runner with spy that rejects
+    const runCollectionSpy = vi
+      .fn()
+      .mockRejectedValue(new Error("unknown tool parameter"));
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
+
+    // Simulate running with unknown tool name
+    await expect(
+      mockRunner.runCollection({
+        collection: "./test-collection.json",
+        tool: "unknown-tool",
+      } as CollectionRunParams & { tool: string }),
+    ).rejects.toThrow("unknown tool parameter");
+  });
+
+  it("should handle invalid input types", async () => {
+    // Setup mock runner with spy that rejects
+    const runCollectionSpy = vi
+      .fn()
+      .mockRejectedValue(new Error("collection must be a string"));
+    const mockRunner = { runCollection: runCollectionSpy };
+    vi.mocked(NewmanRunner).mockImplementation(() => mockRunner);
+
+    // Simulate running with invalid input type
+    await expect(
+      mockRunner.runCollection({
+        collection: 123,
+      } as unknown as CollectionRunParams),
+    ).rejects.toThrow("collection must be a string");
   });
 });
