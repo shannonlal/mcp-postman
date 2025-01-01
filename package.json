@@ -1,6 +1,6 @@
 {
   "name": "mcp-postman",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "MCP Server for running Postman collections using Newman",
   "main": "build/index.js",
   "type": "module",
@@ -46,6 +46,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitest/coverage-v8": "^1.0.0",
+    "axios": "^1.7.9",
     "cross-env": "^7.0.3",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^9.0.0",
