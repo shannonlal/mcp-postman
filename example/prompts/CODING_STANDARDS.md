@@ -344,4 +344,47 @@ describe("User API", () => {
    - Monitor API metrics
    - Set up error tracking
 
+## ERROR Handling Examples
+
+When displaying error or status the following is a working example of an error case
+
+res.status(500).json({ error: "Something went wrong!" });
+
+```
+app.use((err: Error, _req: Request, res: Response) => {
+  console.error(err.stack);
+  res.status(500).json({ error: "Something went wrong!" });
+});
+```
+
+Here is another example of returning a 400 status with error code
+
+```
+
+  // Validate request body
+  if (!name || !description) {
+    return res.status(400).json({ error: "Name and description are required" });
+  }
+```
+
+Here is success example
+
+```
+  res.status(201).json(newItem);
+```
+
+IMPORTANT. ALWAYS USE
+res.status(XXX).json() when responding
+
+Never use
+
+```
+    res.json({
+      status: "success",
+      data: response.data
+    });
+```
+
+As you are not setting a status
+
 Remember: These standards are guidelines, not rigid rules. Use judgment to determine when to deviate based on specific requirements or constraints.
