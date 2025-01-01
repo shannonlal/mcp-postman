@@ -1,4 +1,5 @@
 # Postman MCP Server
+[![smithery badge](https://smithery.ai/badge/mcp-postman)](https://smithery.ai/server/mcp-postman)
 
 An MCP (Model Context Protocol) server that enables running Postman collections using Newman. This server allows LLMs to execute API tests and get detailed results through a standardized interface.
 
@@ -15,6 +16,15 @@ An MCP (Model Context Protocol) server that enables running Postman collections 
 
 ## Installation
 
+### Installing via Smithery
+
+To install Postman Runner for Claude Desktop automatically via [Smithery](https://smithery.ai/server/mcp-postman):
+
+```bash
+npx -y @smithery/cli install mcp-postman --client claude
+```
+
+### Manual Installation
 ```bash
 # Clone the repository
 git clone <repository-url>
