@@ -16,7 +16,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "clean": "rm -rf build",
     "prepare": "husky",
-    "example:dev": "cross-env NODE_OPTIONS=\"--loader ts-node/esm\" ts-node example/src/server.ts",
+    "example:dev": "cross-env NODE_OPTIONS=\"--loader ts-node/esm\" ts-node --watch example/src/server.ts",
     "example:build": "tsc -p example/tsconfig.json"
   },
   "lint-staged": {
