@@ -3,6 +3,35 @@ import express, {
   type Response,
   type NextFunction,
 } from "express";
+import axios from "axios";
+
+// Types for CoinDesk API
+interface CoinDeskTime {
+  updated: string;
+  updatedISO: string;
+  updateduk: string;
+}
+
+interface CoinDeskCurrency {
+  code: string;
+  symbol: string;
+  rate: string;
+  description: string;
+  rate_float: number;
+}
+
+interface CoinDeskBPI {
+  USD: CoinDeskCurrency;
+  GBP: CoinDeskCurrency;
+  EUR: CoinDeskCurrency;
+}
+
+interface CoinDeskResponse {
+  time: CoinDeskTime;
+  disclaimer: string;
+  chartName: string;
+  bpi: CoinDeskBPI;
+}
 
 // Types for our API
 interface Item {
@@ -58,6 +87,18 @@ app.post("/api/items", (req: Request, res: Response) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+// GET /api/currentprice - Get current Bitcoin price
+app.get("/api/currentprice", async (_req: Request, res: Response) => {
+  try {
+    const response = await axios.get<CoinDeskResponse>(
+      "https://api.coindesk.com/v1/bpi/currentprice.json",
+    );
+    res.status(200).json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch Bitcoin price data" });
+  }
 });
 
 // Error handling middleware
