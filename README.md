@@ -2,6 +2,8 @@
 
 An MCP (Model Context Protocol) server that enables running Postman collections using Newman. This server allows LLMs to execute API tests and get detailed results through a standardized interface.
 
+[![MCP Postman Server Demo](https://img.youtube.com/vi/d1WgTqwMsog/0.jpg)](https://youtu.be/d1WgTqwMsog)
+
 ## Features
 
 - Run Postman collections using Newman

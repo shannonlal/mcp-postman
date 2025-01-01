@@ -86,6 +86,31 @@
           }
         }
       ]
+    },
+    {
+      "name": "Get Current Bitcoin Price",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/currentprice",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "currentprice"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
     }
   ]
 }

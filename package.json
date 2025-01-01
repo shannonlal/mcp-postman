@@ -1,6 +1,6 @@
 {
   "name": "mcp-postman",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "MCP Server for running Postman collections using Newman",
   "main": "build/index.js",
   "type": "module",
@@ -16,7 +16,8 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "clean": "rm -rf build",
     "prepare": "husky",
-    "example:dev": "cross-env NODE_OPTIONS=\"--loader ts-node/esm\" ts-node example/src/server.ts",
+    "example:dev": "cross-env NODE_OPTIONS=\"--loader ts-node/esm\" ts-node --watch example/src/server.ts",
+    "example:nodemon": "cross-env NODE_OPTIONS=\"--loader ts-node/esm\"  nodemon --watch example example/src/server.ts",
     "example:build": "tsc -p example/tsconfig.json"
   },
   "lint-staged": {
@@ -46,12 +47,14 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitest/coverage-v8": "^1.0.0",
+    "axios": "^1.7.9",
     "cross-env": "^7.0.3",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^9.0.0",
     "express": "^4.18.2",
     "husky": "^9.1.7",
     "lint-staged": "^15.3.0",
+    "nodemon":"3.1.9",
     "prettier": "^3.0.0",
     "ts-node": "^10.9.0",
     "typescript": "^5.0.0",
