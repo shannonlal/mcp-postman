@@ -17,6 +17,7 @@
     "clean": "rm -rf build",
     "prepare": "husky",
     "example:dev": "cross-env NODE_OPTIONS=\"--loader ts-node/esm\" ts-node --watch example/src/server.ts",
+    "example:nodemon": "cross-env NODE_OPTIONS=\"--loader ts-node/esm\"  nodemon --watch example example/src/server.ts",
     "example:build": "tsc -p example/tsconfig.json"
   },
   "lint-staged": {
@@ -53,6 +54,7 @@
     "express": "^4.18.2",
     "husky": "^9.1.7",
     "lint-staged": "^15.3.0",
+    "nodemon":"3.1.9",
     "prettier": "^3.0.0",
     "ts-node": "^10.9.0",
     "typescript": "^5.0.0",
