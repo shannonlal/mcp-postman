@@ -1,39 +1,28 @@
-### Task List
+## Description
 
-- [ ] You have included a description of the PR
-- [ ] You have included code examples or test cases demonstrating your changes
-- [ ] All linting checks are passing
-- [ ] All tests are passing
-- [ ] You have completed local testing with Postman collections
-- [ ] Documentation has been updated (if applicable)
+<!-- Provide a brief description of the changes in this PR -->
 
-### Description
+## Type of Change
 
-_A few sentences describing the overall effects and goals of the pull request._
-_What is the current behavior, and what is the updated/expected behavior with this PR?_
+<!-- Mark the appropriate option with an 'x' -->
 
-### Testing Notes
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Documentation update
+- [ ] Other (please describe):
 
-_(Required) Provide information about how to test this PR properly. Include:_
+## Checklist
 
-- _Steps to test locally with example Postman collections_
-- _Any specific MCP server configuration needed_
-- _Expected outputs or behaviors to verify_
-- _For complex changes, include a Loom video demonstrating the functionality_
+<!-- Mark completed items with an 'x' -->
 
-### Example Usage
+- [ ] I have read the [CONTRIBUTING](../CONTRIBUTING.md) document
+- [ ] My code follows the code style of this project
+- [ ] I have added/updated documentation as needed
+- [ ] I have added tests that prove my fix/feature works
+- [ ] All new and existing tests pass
+- [ ] I have tested these changes locally
 
-```typescript
-// Include code examples showing how to use your changes
-// For example, how to use new MCP tools or resources you've added
-```
+## Additional Notes
 
-### Test Results
-
-```
-// Include relevant test output or screenshots showing tests passing
-```
-
-### Additional Context
-
-_Include any additional context, screenshots, or references that would help reviewers understand your changes._
+<!-- Add any additional notes, context, or screenshots about the PR here -->
