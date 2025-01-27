@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@modelcontextprotocol/sdk':
         specifier: latest
-        version: 1.0.4
+        version: 1.4.1
       newman:
         specifier: ^6.0.0
         version: 6.2.1
@@ -265,6 +265,7 @@ packages:
 
   '@faker-js/faker@5.5.3':
     resolution: {integrity: sha512-R11tGE6yIFwqpaIqcfkcg7AICXzFg14+5h5v0TfF/9+RMDL6jhzCy/pxHVOfbALGdtVYdt6JdR21tuxEgl34dw==}
+    deprecated: Please update to a newer version.
 
   '@humanwhocodes/config-array@0.13.0':
     resolution: {integrity: sha512-DZLEEqFWQFiyK6h5YIeynKx7JlvCYWL0cImfSRXZ9l4Sg2efkFGTuFf6vzXjK1cq6IYkU+Eg/JizXw+TD2vRNw==}
@@ -308,8 +309,9 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
-  '@modelcontextprotocol/sdk@1.0.4':
-    resolution: {integrity: sha512-C+jw1lF6HSGzs7EZpzHbXfzz9rj9him4BaoumlTciW/IDDgIpweF/qiCWKlP02QKg5PPcgY6xY2WCt5y2tpYow==}
+  '@modelcontextprotocol/sdk@1.4.1':
+    resolution: {integrity: sha512-wS6YC4lkUZ9QpP+/7NBTlVNiEvsnyl0xF7rRusLF+RsG0xDPc/zWR7fEEyhKnnNutGsDAZh59l/AeoWGwIb1+g==}
+    engines: {node: '>=18'}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -993,6 +995,14 @@ packages:
 
   eventemitter3@5.0.1:
     resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
+
+  eventsource-parser@3.0.0:
+    resolution: {integrity: sha512-T1C0XCUimhxVQzW4zFipdx0SficT651NnkR0ZSH3yQwh+mFMdLfgjABVi4YtMTtaL4s168593DaoaRLMqryavA==}
+    engines: {node: '>=18.0.0'}
+
+  eventsource@3.0.3:
+    resolution: {integrity: sha512-dz1sFfDM1EK7/HrGMoIW1+qdQc15w0ibDu4N7i4QzPVQoT8A8cRouZO2R/nq8o8XlW/pMx6pNqq18Vfi3rgKzw==}
+    engines: {node: '>=18.0.0'}
 
   execa@8.0.1:
     resolution: {integrity: sha512-VyhnebXciFV2DESc+p6B+y0LjSm0krU4OgJN44qFAhBY0TJ+1V61tYD2+wHusZ6F9n5K+vl8k0sTy7PEfV4qpg==}
@@ -2130,6 +2140,11 @@ packages:
     resolution: {integrity: sha512-b4JR1PFR10y1mKjhHY9LaGo6tmrgjit7hxVIeAmyMw3jegXR4dhYqLaQF5zMXZxY7tLpMyJeLjr1C4rLmkVe8g==}
     engines: {node: '>=12.20'}
 
+  zod-to-json-schema@3.24.1:
+    resolution: {integrity: sha512-3h08nf3Vw3Wl3PK+q3ow/lIil81IT2Oa7YpQyUUDsEWbXveMesdfK1xBd2RhCkynwZndAxixji/7SYJJowr62w==}
+    peerDependencies:
+      zod: ^3.24.1
+
   zod@3.24.1:
     resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
 
@@ -2296,11 +2311,13 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@modelcontextprotocol/sdk@1.0.4':
+  '@modelcontextprotocol/sdk@1.4.1':
     dependencies:
       content-type: 1.0.5
+      eventsource: 3.0.3
       raw-body: 3.0.0
       zod: 3.24.1
+      zod-to-json-schema: 3.24.1(zod@3.24.1)
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -3027,6 +3044,12 @@ snapshots:
   etag@1.8.1: {}
 
   eventemitter3@5.0.1: {}
+
+  eventsource-parser@3.0.0: {}
+
+  eventsource@3.0.3:
+    dependencies:
+      eventsource-parser: 3.0.0
 
   execa@8.0.1:
     dependencies:
@@ -4216,5 +4239,9 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   yocto-queue@1.1.1: {}
+
+  zod-to-json-schema@3.24.1(zod@3.24.1):
+    dependencies:
+      zod: 3.24.1
 
   zod@3.24.1: {}
