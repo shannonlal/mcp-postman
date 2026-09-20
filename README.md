@@ -7,6 +7,9 @@ An MCP (Model Context Protocol) server that enables running Postman collections 
 
 <a href="https://glama.ai/mcp/servers/qfx34b2s2v"><img width="380" height="200" src="https://glama.ai/mcp/servers/qfx34b2s2v/badge" alt="Postman Server MCP server" /></a>
 
+## AI Agent Listing
+[![Postman MCP Server on AI Agents Listing](https://aiagentslisting.com/postman-mcp-server-2/badge.svg?claim=c5d8ff3f60569ee9b3aa79b368b14860)](https://aiagentslisting.com/mcp/postman-mcp-server-2)
+
 ## Features
 
 - Run Postman collections using Newman
