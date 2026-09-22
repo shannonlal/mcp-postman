@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/shannonlal-mcp-postman-badge.png)](https://mseep.ai/app/shannonlal-mcp-postman)
+
 # Postman MCP Server
 [![smithery badge](https://smithery.ai/badge/mcp-postman)](https://smithery.ai/server/mcp-postman)
 
